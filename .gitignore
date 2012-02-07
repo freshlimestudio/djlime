@@ -1,0 +1,11 @@
+*.pyc
+*.pyo
+*.pyw
+.idea
+*~
+/nbproject*
+.project
+.pydevproject
+.settings/*
+djlime.egg-info/
+dist/*
