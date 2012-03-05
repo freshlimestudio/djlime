@@ -16,8 +16,6 @@ from django.core.mail.message import EmailMultiAlternatives
 
 def send_mail(recipients, subject_template, html_template, text_template,
               context):
-    assert (getattr(settings, 'DEFAULT_FROM_EMAIL', None) is not None,
-            "You must specify `DEFAULT_FROM_EMAIL` in your settings.")
     subject = render_to_string(subject_template, context)
     # Email subject *must not* contain newlines
     subject = ''.join(subject.splitlines())
