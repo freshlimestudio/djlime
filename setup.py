@@ -43,7 +43,7 @@ for dirpath, dirnames, filenames in os.walk(djlime_dir):
 
 setup(
     name='djlime',
-    version='0.0.4',
+    version='0.0.5',
     description='Django goodies.',
     author='Andrey Voronov',
     author_email='voronov84@gmail.com',
