@@ -1,3 +1,13 @@
+"""
+    djlime.utils
+    ~~~~~~~~~~~~~~
+
+    Utilities.
+
+    :copyright: (c) 2012 by Andrey Voronov.
+    :license: BSD, see LICENSE for more details.
+"""
+
 import os
 import uuid
 

@@ -1,12 +1,19 @@
+"""
+    djlime.forms.widgets
+    ~~~~~~~~~~~~~~
+
+    Extended django form widgets.
+
+    :copyright: (c) 2012 by Andrey Voronov.
+    :license: BSD, see LICENSE for more details.
+"""
+
 from itertools import chain
 from django.forms import widgets
 from django.forms.util import flatatt
 from django.utils.encoding import force_unicode
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
-
-
-__author__ = 'andrey'
 
 
 class RadioInput(widgets.RadioInput):

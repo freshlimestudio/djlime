@@ -1,3 +1,13 @@
+"""
+    djlime.templatetags.utils
+    ~~~~~~~~~~~~~~
+
+    Useful templatetags.
+
+    :copyright: (c) 2012 by Andrey Voronov.
+    :license: BSD, see LICENSE for more details.
+"""
+
 import re
 
 from django.template import Library
