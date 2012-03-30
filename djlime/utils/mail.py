@@ -14,8 +14,8 @@ from django.template.loader import render_to_string
 from django.core.mail.message import EmailMultiAlternatives
 
 
-def send_mail(recipients, subject_template, html_template, text_template,
-              context):
+def send_mail(recipients=None, sender=None, subject_template='', html_template=None,
+              text_template=None, context=None):
     subject = render_to_string(subject_template, context)
     # Email subject *must not* contain newlines
     subject = ''.join(subject.splitlines())
@@ -24,6 +24,6 @@ def send_mail(recipients, subject_template, html_template, text_template,
     if not isinstance(recipients, list):
         recipients = [recipients]
     msg = EmailMultiAlternatives(subject, text_msg,
-                                 settings.DEFAULT_FROM_EMAIL, recipients)
+                                 sender or settings.DEFAULT_FROM_EMAIL, recipients)
     msg.attach_alternative(html_msg, "text/html")
     msg.send()
