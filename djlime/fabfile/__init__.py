@@ -27,6 +27,7 @@ env.git_host = ''
 env.project_name = '{{ project_name }}'
 env.repo = "git@{git_host}:/projects/{project_name}".format(**env)
 env.use_ssh_config = env.remote_deployment
+env.shared_dirs = 'config media static releases/{current,previous}'
 
 
 @task(default=True)
@@ -40,7 +41,6 @@ def dev():
     """Development server"""
     env.user = ''
     env.branch = ''
-    env.shared_dirs = ''
     env.hosts = []
     env.vhosts_root = "/var/www/vhosts"
     env.host_name = ''
@@ -53,7 +53,6 @@ def prod():
     """Production server"""
     env.user = ''
     env.branch = ""
-    env.shared_dirs = ''
     env.hosts = ['']
     env.host_name = ''
     env.vhosts_root = "/home/{user}".format(**env)
@@ -66,7 +65,7 @@ def setup():
     """Initial deployment setup"""
     run("mkvirtualenv {project_name}".format(**env))
     with cd(env.vhost_path):
-        run('mkdir -p {shared_dirs} config media static releases/{current,previous}'.format(**env))
+        run('mkdir -p {shared_dirs}'.format(**env))
 
 
 @task(alias='dep')
