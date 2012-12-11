@@ -28,6 +28,7 @@ env.project_name = '{{ project_name }}'
 env.repo = "git@{git_host}:/projects/{project_name}".format(**env)
 env.use_ssh_config = env.remote_deployment
 env.shared_dirs = 'config media static releases/{current,previous}'
+env.requirements_file = 'requirements.txt'
 
 
 @task(default=True)
@@ -201,7 +202,7 @@ def install_requirements(param=''):
             env.upgrade = "--upgrade"
         else:
             env.upgrade = ''
-        run("pip install -r requirements/main.txt {upgrade}".format(**env))
+        run("pip install -r {requirements_file} {upgrade}".format(**env))
 
 
 @task
