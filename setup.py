@@ -53,6 +53,7 @@ setup(
     data_files=data_files,
     requires=[
         'django(>=1.3)',
+        'simplejson',
     ],
     classifiers=[
         'Development Status :: 3 - Alpha',
