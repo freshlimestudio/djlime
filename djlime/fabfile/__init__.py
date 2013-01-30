@@ -6,9 +6,11 @@ import os
 import sys
 from contextlib import contextmanager as _contextmanager
 
+from fabric import state
 from fabric.api import *
 from fabric.colors import *
 from fabric.contrib.files import comment, uncomment
+from fabric.task_utils import crawl
 
 
 if sys.platform.startswith('linux'):
@@ -16,11 +18,13 @@ if sys.platform.startswith('linux'):
 else:
     env.remote_deployment = False
 
-__all__ = ('deploy_to_dev_server', 'dev', 'prod', 'setup', 'deploy', 'venv',
+__all__ = (
+    'deploy_to_dev_server', 'dev', 'prod', 'setup', 'deploy', 'venv',
     'deploy_version', 'rollback', 'releases', 'update_code',
     'update_code_from_repo', 'update_code_from_archive',
     'install_requirements', 'symlink_current_release', 'collect_static_files',
-    'syncdb', 'migrate', 'cleanup', 'debug', 'restart_webserver', 'clean')
+    'syncdb', 'migrate', 'cleanup', 'debug', 'restart_webserver', 'clean'
+)
 
 # globals
 env.git_host = ''
@@ -46,19 +50,19 @@ def dev():
     env.vhosts_root = "/var/www/vhosts"
     env.host_name = ''
     env.vhost_path = '{vhosts_root}/{project_name}.{host_name}'.format(**env)
-    env.release_path = "{vhosts_root}/{project_name}.{host_name}/releases/current".format(**env)
+    env.release_path = "{vhost_path}/releases/current".format(**env)
 
 
 @task
 def prod():
     """Production server"""
     env.user = ''
-    env.branch = ""
+    env.branch = ''
     env.hosts = ['']
     env.host_name = ''
     env.vhosts_root = "/home/{user}".format(**env)
     env.vhost_path = '{vhosts_root}/{host_name}'.format(**env)
-    env.release_path = "{vhosts_root}/{host_name}/releases/current".format(**env)
+    env.release_path = "{vhost_path}/releases/current".format(**env)
 
 
 @task(alias='up')
@@ -88,6 +92,9 @@ def deploy(param=''):
         cleanup()
         if param == 'migrate':
             migrate()
+        after_deploy_task = crawl('after_deploy', state.commands)
+        if after_deploy_task:
+            execute(after_deploy_task)
         restart_webserver()
     except (SystemExit, KeyboardInterrupt):
         tarball = '{release}.tar.gz'.format(**env)
@@ -278,4 +285,3 @@ def restart_webserver():
 @task
 def clean():
     local('find . -name "*.pyc" -exec rm -f {} \;')
-
