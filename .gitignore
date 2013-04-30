@@ -9,3 +9,4 @@
 .settings/*
 djlime.egg-info/
 dist/*
+build/*
