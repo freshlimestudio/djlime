@@ -235,7 +235,7 @@ def syncdb(param=''):
     """Update the database"""
     with venv():
         print(green("Run syncdb for apps"))
-        run('python manage.py syncdb -v0 --noinput'.format(**env))
+        run('python manage.py syncdb -v0'.format(**env))
 
 
 @task
