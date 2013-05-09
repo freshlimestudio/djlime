@@ -85,22 +85,25 @@ def deploy(param=''):
     try:
         print(green("Start deployment to production"))
         env.release = time.strftime('%Y%m%d%H%M%S')
-        update_code()
-        symlink_current_release()
-        install_requirements()
-        collect_static_files()
-        cleanup()
+        execute('update_code')
+        execute('symlink_current_release')
+        execute('install_requirements')
+        execute('collect_static_files')
+        execute('cleanup')
         if param == 'migrate':
-            migrate()
-        after_deploy_task = crawl('after_deploy', state.commands)
-        if after_deploy_task:
-            execute(after_deploy_task)
-        restart_webserver()
+            execute('migrate')
+        execute('after_deploy_task')
+        execute('restart_webserver')
     except (SystemExit, KeyboardInterrupt):
         tarball = '{release}.tar.gz'.format(**env)
         if os.path.exists(tarball):
             print('Cleanup tarball')
             os.remove(tarball)
+
+
+@task
+def after_deploy_task():
+    pass
 
 
 @_contextmanager
