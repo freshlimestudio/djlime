@@ -93,7 +93,7 @@ def deploy(param=''):
         execute('cleanup')
         if param == 'migrate':
             execute('migrate')
-        execute('after_deploy_task')
+        execute('after_deploy')
         execute('restart_webserver')
     except (SystemExit, KeyboardInterrupt):
         tarball = '{release}.tar.gz'.format(**env)
@@ -103,7 +103,7 @@ def deploy(param=''):
 
 
 @task
-def after_deploy_task():
+def after_deploy():
     pass
 
 
