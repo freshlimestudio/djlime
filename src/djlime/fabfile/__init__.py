@@ -31,6 +31,7 @@ env.git_host = ''
 env.project_name = '{{ project_name }}'
 env.repo = "git@{git_host}:/projects/{project_name}".format(**env)
 env.use_ssh_config = env.remote_deployment
+env.django_settings_module = '{{ project_name }}.settings'
 env.shared_dirs = 'config media static releases/{current,previous}'
 env.requirements_file = 'requirements.txt'
 
@@ -109,8 +110,9 @@ def after_deploy_task():
 @_contextmanager
 def venv():
     with cd(env.release_path):
-        with prefix('workon {project_name}'.format(**env)):
-            yield
+        with shell_env(DJANGO_SETTINGS_MODULE=env.django_settings_module):
+            with prefix('workon {project_name}'.format(**env)):
+                yield
 
 
 @task
