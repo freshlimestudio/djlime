@@ -29,7 +29,6 @@ env.git_host = ''
 env.project_name = ''
 env.repo = 'git@{git_host}:/projects/{project_name}'.format(**env)
 env.use_ssh_config = env.remote_deployment
-env.django_settings_module = lambda: '{project_name}.settings'.format(**env)
 env.shared_dirs = 'config media static releases/{current,previous}'
 env.requirements_file = 'requirements.txt'
 
@@ -48,6 +47,7 @@ def dev():
     env.hosts = []
     env.vhosts_root = "/var/www/vhosts"
     env.host_name = ''
+    env.django_settings_module = '{project_name}.settings'.format(**env)
     env.vhost_path = '{vhosts_root}/{project_name}.{host_name}'.format(**env)
     env.release_path = "{vhost_path}/releases/current".format(**env)
 
@@ -95,8 +95,9 @@ def after_deploy():
 
 @_contextmanager
 def venv():
+    require('django_settings_module', provided_by=['dev', 'prod'])
     with cd(env.release_path):
-        with shell_env(DJANGO_SETTINGS_MODULE=env.django_settings_module()):
+        with shell_env(DJANGO_SETTINGS_MODULE=env.django_settings_module):
             with prefix('workon {project_name}'.format(**env)):
                 yield
 
