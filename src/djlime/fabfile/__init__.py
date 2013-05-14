@@ -18,7 +18,7 @@ else:
     env.remote_deployment = False
 
 __all__ = (
-    'deploy_to_dev_server', 'dev', 'prod', 'setup', 'deploy', 'venv',
+    'deploy_to_dev_server', 'dev', 'setup', 'deploy', 'venv',
     'deploy_version', 'rollback', 'releases', 'update_code',
     'update_code_from_repo', 'update_code_from_archive',
     'install_requirements', 'symlink_current_release', 'collect_static_files',
