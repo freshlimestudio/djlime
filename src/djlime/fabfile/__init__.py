@@ -6,7 +6,6 @@ import os
 import sys
 from contextlib import contextmanager as _contextmanager
 
-from fabric import state
 from fabric.api import *
 from fabric.colors import *
 from fabric.contrib.files import comment, uncomment
@@ -27,10 +26,10 @@ __all__ = (
 
 # globals
 env.git_host = ''
-env.project_name = '{{ project_name }}'
+env.project_name = ''
 env.repo = 'git@{git_host}:/projects/{project_name}'.format(**env)
 env.use_ssh_config = env.remote_deployment
-env.django_settings_module = '{project_name}.settings'.format(**env)
+env.django_settings_module = lambda: '{project_name}.settings'.format(**env)
 env.shared_dirs = 'config media static releases/{current,previous}'
 env.requirements_file = 'requirements.txt'
 
@@ -97,7 +96,7 @@ def after_deploy():
 @_contextmanager
 def venv():
     with cd(env.release_path):
-        with shell_env(DJANGO_SETTINGS_MODULE=env.django_settings_module):
+        with shell_env(DJANGO_SETTINGS_MODULE=env.django_settings_module()):
             with prefix('workon {project_name}'.format(**env)):
                 yield
 
