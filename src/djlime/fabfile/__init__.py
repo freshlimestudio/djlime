@@ -10,7 +10,6 @@ from fabric import state
 from fabric.api import *
 from fabric.colors import *
 from fabric.contrib.files import comment, uncomment
-from fabric.task_utils import crawl
 
 
 if sys.platform.startswith('linux'):
@@ -29,7 +28,7 @@ __all__ = (
 # globals
 env.git_host = ''
 env.project_name = '{{ project_name }}'
-env.repo = "git@{git_host}:/projects/{project_name}".format(**env)
+env.repo = 'git@{git_host}:/projects/{project_name}'.format(**env)
 env.use_ssh_config = env.remote_deployment
 env.django_settings_module = '{project_name}.settings'.format(**env)
 env.shared_dirs = 'config media static releases/{current,previous}'
@@ -51,18 +50,6 @@ def dev():
     env.vhosts_root = "/var/www/vhosts"
     env.host_name = ''
     env.vhost_path = '{vhosts_root}/{project_name}.{host_name}'.format(**env)
-    env.release_path = "{vhost_path}/releases/current".format(**env)
-
-
-@task
-def prod():
-    """Production server"""
-    env.user = ''
-    env.branch = ''
-    env.hosts = ['']
-    env.host_name = ''
-    env.vhosts_root = "/home/{user}".format(**env)
-    env.vhost_path = '{vhosts_root}/{host_name}'.format(**env)
     env.release_path = "{vhost_path}/releases/current".format(**env)
 
 
