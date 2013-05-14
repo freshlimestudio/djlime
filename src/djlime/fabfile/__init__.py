@@ -68,7 +68,7 @@ def deploy(param=''):
     then restart the webserver
     """
     require('branch', 'vhosts_root', 'host_name', 'vhost_path', 'release_path',
-            provided_by=[dev, prod])
+            provided_by=['dev', 'prod'])
     try:
         print(green("Start deployment to production"))
         env.release = time.strftime('%Y%m%d%H%M%S')
@@ -104,7 +104,7 @@ def venv():
 @task
 def deploy_version(version):
     """Specify a specific version to be made live"""
-    require('hosts', provided_by=[prod, dev])
+    require('hosts', provided_by=['prod', 'dev'])
     env.version = version
     with cd(env.vhost_path):
         run("rm -rf releases/previous; mv -f releases/current releases/previous;")
@@ -120,7 +120,7 @@ def rollback():
     version of the code. Rolling back again will swap between the two.
     """
     print(green("Rollback deployed changes"))
-    require('hosts', provided_by=[prod, dev])
+    require('hosts', provided_by=['prod', 'dev'])
     with cd(env.vhost_path):
         run("mv -f releases/current releases/_previous;")
         run("mv -f releases/previous releases/current;")
@@ -151,7 +151,7 @@ def update_code():
 
 @task
 def update_code_from_repo():
-    require('release', provided_by=[deploy])
+    require('release', provided_by=['deploy'])
     print(green("Update code from git"))
     result = local('git ls-remote {repo} {branch}'.format(**env), capture=True)
     revdata = re.split(r'[\t\n]', result)
@@ -171,7 +171,7 @@ def update_code_from_repo():
 @task
 def update_code_from_archive():
     """Pack local repository copy to archive and upload to server"""
-    require('release', provided_by=[deploy])
+    require('release', provided_by=['deploy'])
     print(green("Create local git snapshot"))
     result = local('git ls-remote {repo} {branch}'.format(**env), capture=True)
     revdata = re.split(r'[\t\n]', result)
@@ -206,7 +206,7 @@ def install_requirements(param=''):
 @task
 def symlink_current_release():
     """Symlink our current release"""
-    require('release', provided_by=[deploy])
+    require('release', provided_by=['deploy'])
     with cd(env.vhost_path):
         run("rm -rf releases/previous; mv -f releases/current releases/previous;")
         run("ln -s {release} releases/current".format(**env))
