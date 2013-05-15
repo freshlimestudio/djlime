@@ -8,6 +8,7 @@ from contextlib import contextmanager as _contextmanager
 
 from fabric.api import *
 from fabric.colors import *
+from fabric.state import commands
 from fabric.contrib.files import comment, uncomment
 
 
@@ -79,7 +80,8 @@ def deploy(param=''):
         execute('cleanup')
         if param == 'migrate':
             execute('migrate')
-        execute('after_deploy')
+        if 'after_deploy' in commands:
+            execute('after_deploy')
         execute('restart_webserver')
     except (SystemExit, KeyboardInterrupt):
         tarball = '{release}.tar.gz'.format(**env)
