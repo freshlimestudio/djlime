@@ -221,7 +221,7 @@ def collect_static_files():
     """Collect static files"""
     with venv():
         print(green("Collect static files"))
-        run("python manage.py collectstatic -v0 --noinput".format(**env))
+        run("django-admin.py collectstatic -v0 --noinput".format(**env))
 
 
 @task
@@ -229,7 +229,7 @@ def syncdb(param=''):
     """Update the database"""
     with venv():
         print(green("Run syncdb for apps"))
-        run('python manage.py syncdb -v0'.format(**env))
+        run('django-admin.py syncdb -v0'.format(**env))
 
 
 @task
@@ -237,7 +237,7 @@ def migrate(param=''):
     """Update the database"""
     with venv():
         print(green("Migrate apps"))
-        run("python manage.py migrate --no-initial-data".format(**env))
+        run("django-admin.py migrate --no-initial-data".format(**env))
 
 
 @task
