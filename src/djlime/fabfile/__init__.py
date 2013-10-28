@@ -57,6 +57,7 @@ def dev():
 def setup():
     """Initial deployment setup"""
     run("mkvirtualenv {project_name}".format(**env))
+    execute(setup_remote)
     with cd(env.vhost_path):
         run('mkdir -p {shared_dirs}'.format(**env))
 
@@ -279,3 +280,19 @@ def restart_webserver():
 @task
 def clean():
     local('find . -name "*.pyc" -exec rm -f {} \;')
+
+
+@task(alias='setup-local')
+def setup_local():
+    env.venvwrapper = local('which virtualenvwrapper.sh', capture=True)
+    local('source {venvwrapper} && workon {project_name} && add2virtualenv .'.format(**env), shell='/bin/bash')
+    local('echo "export DJANGO_SETTINGS_MODULE={project_name}.settings.dev" >> ~/.virtualenvs/{project_name}/bin/postactivate'.format(**env))
+    local('echo "unset DJANGO_SETTINGS_MODULE" >> ~/.virtualenvs/{project_name}/bin/postdeactivate'.format(**env))
+
+
+@task(alias='setup-remote')
+def setup_remote():
+    with venv():
+        run('add2virtualenv {release_path}'.format(**env), shell='/bin/bash')
+        run('echo "export DJANGO_SETTINGS_MODULE={django_settings_module}" >> ~/.virtualenvs/{project_name}/bin/postactivate'.format(**env))
+        run('echo "unset DJANGO_SETTINGS_MODULE" >> ~/.virtualenvs/{project_name}/bin/postdeactivate'.format(**env))
