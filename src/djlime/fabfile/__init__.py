@@ -57,9 +57,9 @@ def dev():
 def setup():
     """Initial deployment setup"""
     run("mkvirtualenv {project_name}".format(**env))
-    execute(setup_remote)
     with cd(env.vhost_path):
         run('mkdir -p {shared_dirs}'.format(**env))
+    execute(setup_remote)
 
 
 @task(alias='dep')
