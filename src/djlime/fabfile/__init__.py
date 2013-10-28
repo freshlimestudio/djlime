@@ -22,7 +22,8 @@ __all__ = (
     'deploy_version', 'rollback', 'releases', 'update_code',
     'update_code_from_repo', 'update_code_from_archive',
     'install_requirements', 'symlink_current_release', 'collect_static_files',
-    'syncdb', 'migrate', 'cleanup', 'debug', 'restart_webserver', 'clean'
+    'syncdb', 'migrate', 'cleanup', 'debug', 'restart_webserver', 'clean',
+    'setup_local', 'setup_remote',
 )
 
 # globals
