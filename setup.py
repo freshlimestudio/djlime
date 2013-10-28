@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='djlime',
-    version='0.0.25',
+    version='0.0.26',
     description='Django goodies.',
     author='Andrey Voronov',
     author_email='voronov84@gmail.com',
