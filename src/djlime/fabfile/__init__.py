@@ -29,6 +29,7 @@ __all__ = (
 # globals
 env.git_host = ''
 env.project_name = ''
+env.venv_name = env.project_name
 env.repo = 'git@{git_host}:/projects/{project_name}'.format(**env)
 env.use_ssh_config = env.remote_deployment
 env.shared_dirs = 'config media static releases/{current,previous}'
@@ -102,7 +103,7 @@ def venv():
     require('django_settings_module', provided_by=['dev', 'prod'])
     with cd(env.release_path):
         with shell_env(DJANGO_SETTINGS_MODULE=env.django_settings_module):
-            with prefix('workon {project_name}'.format(**env)):
+            with prefix('workon {venv_name}'.format(**env)):
                 yield
 
 
@@ -286,14 +287,14 @@ def clean():
 @task(alias='setup-local')
 def setup_local():
     env.venvwrapper = local('which virtualenvwrapper.sh', capture=True)
-    local('source {venvwrapper} && workon {project_name} && add2virtualenv .'.format(**env), shell='/bin/bash')
-    local('echo "export DJANGO_SETTINGS_MODULE={django_settings_module}" >> ~/.virtualenvs/{project_name}/bin/postactivate'.format(**env))
-    local('echo "unset DJANGO_SETTINGS_MODULE" >> ~/.virtualenvs/{project_name}/bin/postdeactivate'.format(**env))
+    local('source {venvwrapper} && workon {venv_name} && add2virtualenv .'.format(**env), shell='/bin/bash')
+    local('echo "export DJANGO_SETTINGS_MODULE={django_settings_module}" >> ~/.virtualenvs/{venv_name}/bin/postactivate'.format(**env))
+    local('echo "unset DJANGO_SETTINGS_MODULE" >> ~/.virtualenvs/{venv_name}/bin/postdeactivate'.format(**env))
 
 
 @task(alias='setup-remote')
 def setup_remote():
     with venv():
         run('add2virtualenv {release_path}'.format(**env), shell='/bin/bash')
-        run('echo "export DJANGO_SETTINGS_MODULE={django_settings_module}" >> ~/.virtualenvs/{project_name}/bin/postactivate'.format(**env))
-        run('echo "unset DJANGO_SETTINGS_MODULE" >> ~/.virtualenvs/{project_name}/bin/postdeactivate'.format(**env))
+        run('echo "export DJANGO_SETTINGS_MODULE={django_settings_module}" >> ~/.virtualenvs/{venv_name}/bin/postactivate'.format(**env))
+        run('echo "unset DJANGO_SETTINGS_MODULE" >> ~/.virtualenvs/{venv_name}/bin/postdeactivate'.format(**env))
