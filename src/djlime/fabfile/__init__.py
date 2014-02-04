@@ -29,7 +29,6 @@ __all__ = (
 # globals
 env.git_host = ''
 env.project_name = ''
-env.venv_name = env.project_name
 env.repo = 'git@{git_host}:/projects/{project_name}'.format(**env)
 env.use_ssh_config = env.remote_deployment
 env.shared_dirs = 'config media static releases/{current,previous}'
@@ -40,6 +39,11 @@ env.requirements_file = 'requirements.txt'
 def deploy_to_dev_server():
     execute(dev)
     execute(deploy)
+
+
+def _set_venv_name():
+    if not env.venv_name:
+        env.venv_name = env.project_name
 
 
 @task
@@ -73,6 +77,7 @@ def deploy(param=''):
     """
     require('branch', 'vhosts_root', 'host_name', 'vhost_path', 'release_path',
             provided_by=['dev', 'prod'])
+    _set_venv_name()
     try:
         print(green("Start deployment to production"))
         env.release = time.strftime('%Y%m%d%H%M%S')
