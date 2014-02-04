@@ -29,6 +29,7 @@ __all__ = (
 # globals
 env.git_host = ''
 env.project_name = ''
+env.venv_name = ''
 env.repo = 'git@{git_host}:/projects/{project_name}'.format(**env)
 env.use_ssh_config = env.remote_deployment
 env.shared_dirs = 'config media static releases/{current,previous}'
