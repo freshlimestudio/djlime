@@ -282,7 +282,10 @@ def debug(param="on"):
 def restart_webserver():
     """Restart the web server"""
     with cd(env.path):
-        run('touch {release_path}/{project_name}/wsgi.py'.format(**env))
+        if env.django_settings_module.split('.')[-1] == 'stage':
+            run('touch {release_path}/{project_name}/wsgi_stage.py'.format(**env))
+        else:
+            run('touch {release_path}/{project_name}/wsgi.py'.format(**env))
 
 
 @task
