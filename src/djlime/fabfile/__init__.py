@@ -63,6 +63,7 @@ def dev():
 @task(alias='up')
 def setup():
     """Initial deployment setup"""
+    _set_venv_name()
     run("mkvirtualenv {project_name}".format(**env))
     with cd(env.vhost_path):
         run('mkdir -p {shared_dirs}'.format(**env))
