@@ -107,6 +107,7 @@ def after_deploy():
 
 @_contextmanager
 def venv():
+    _set_venv_name()
     require('django_settings_module', provided_by=['dev', 'prod'])
     with cd(env.release_path):
         with shell_env(DJANGO_SETTINGS_MODULE=env.django_settings_module):
