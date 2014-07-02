@@ -5,7 +5,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='djlime',
-    version='0.0.33',
+    version='0.0.34',
     description='Django goodies.',
     author='Andrey Voronov',
     author_email='voronov84@gmail.com',
@@ -17,7 +17,7 @@ setup(
     include_package_data=True,
     license='BSD',
     install_requires=[
-        'django>=1.4',
+        'django>=1.5',
         'simplejson',
     ],
     classifiers=[
