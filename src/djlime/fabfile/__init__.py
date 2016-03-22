@@ -248,7 +248,7 @@ def migrate(param=''):
     """Update the database"""
     with venv():
         print(green("Migrate apps"))
-        run("django-admin.py migrate --no-initial-data".format(**env))
+        run("django-admin.py migrate".format(**env))
 
 
 @task
